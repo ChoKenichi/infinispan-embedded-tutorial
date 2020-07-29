@@ -49,9 +49,9 @@ public class OpenWeatherMapService extends CachingWeatherService {
            });
         }
      } catch (MalformedURLException e) {
-          e.printStackTrace();
+          //e.printStackTrace();
      } catch (NullPointerException e) {
-          e.printStackTrace();
+          //e.printStackTrace();
      }
        
    }
