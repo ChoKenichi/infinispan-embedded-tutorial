@@ -16,8 +16,11 @@ import static java.util.stream.Collectors.groupingBy;
 public class WeatherApp {
 
    static final String[] locations = { "Rome, Italy", "Como, Italy", "Basel, Switzerland", "Bern, Switzerland",
-         "London, UK", "Newcastle, UK", "Bucarest, Romania", "Cluj-Napoca, Romania", "Ottawa, Canada",
-         "Toronto, Canada", "Lisbon, Portugal", "Porto, Portugal", "Raleigh, USA", "Washington, USA" };
+         "London, UK", /*"Newcastle UK",*/ "Bucarest, Romania", "Cluj-Napoca, Romania", "Ottawa, Canada",
+         "Toronto, Canada", "Lisbon, Portugal", "Porto, Portugal", "Raleigh, USA", "Washington, USA",
+         "Sapporo, JP", "Abashiri, JP",
+         "Tokyo, JP", "Osaka,JP", "Fukuoka, JP", "Naha, JP", 
+ };
    private final EmbeddedCacheManager cacheManager;
    private final WeatherService weatherService;
    private Cache<String, LocationWeather> cache;
@@ -33,6 +36,8 @@ public class WeatherApp {
 
       System.out.println("---- Waiting for cluster to form ----");
       listener.clusterFormedLatch.await();
+      TimeUnit.SECONDS.sleep(1);
+      
    }
 
    private WeatherService initWeatherService(Cache<String,LocationWeather> cache) {
@@ -81,7 +86,7 @@ public class WeatherApp {
 
             app.fetchWeather();
 
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(6);
 
             app.fetchWeather();
 

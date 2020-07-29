@@ -3,6 +3,9 @@ package org.infinispan.tutorial.embedded;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.MalformedURLException;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,6 +28,32 @@ public class OpenWeatherMapService extends CachingWeatherService {
          db = dbf.newDocumentBuilder();
       } catch (ParserConfigurationException e) {
       }
+      setProxy(System.getenv("HTTP_PROXY"));
+   }
+   private void setProxy(String urlStr) {
+     // urlStr =  http://user:password@host:port
+     try {
+       URL url = new URL(urlStr);
+
+       System.setProperty("proxySet", "true");
+       System.setProperty("proxyHost", url.getHost());
+       System.setProperty("proxyPort", "" + url.getPort());
+
+       String userInfo[] = url.getUserInfo().split(":", 0);
+       if(userInfo.length >= 2) {
+          Authenticator.setDefault(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(userInfo[0], userInfo[1].toCharArray());
+                }
+           });
+        }
+     } catch (MalformedURLException e) {
+          e.printStackTrace();
+     } catch (NullPointerException e) {
+          e.printStackTrace();
+     }
+       
    }
 
    private Document fetchData(String location) {
@@ -37,10 +66,13 @@ public class OpenWeatherMapService extends CachingWeatherService {
          conn.setRequestMethod("GET");
          conn.setRequestProperty("Accept", "application/xml");
          if (conn.getResponseCode() != 200) {
-            throw new Exception();
+            throw new Exception(location + " HTTP " + conn.getResponseCode());
          }
          return db.parse(conn.getInputStream());
       } catch (Exception e) {
+         System.out.println("==========================");
+         System.out.println(e);
+         System.out.println("==========================");
          return null;
       } finally {
          if (conn != null) {
