@@ -57,7 +57,9 @@ public class WeatherApp {
          LocationWeather weather = weatherService.getWeatherForLocation(location);
          System.out.printf("%s - %s\n", location, weather);
       }
+      System.out.println("=============================");
       System.out.printf("---- Fetched in %dms ----\n", System.currentTimeMillis() - start);
+      System.out.println("=============================");
    }
 
    public void computeCountryAverages() {
