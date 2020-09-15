@@ -34,9 +34,9 @@ public class WeatherApp {
       cache.addListener(new CacheListener());
       weatherService = initWeatherService(cache);
 
-      System.out.println("---- Waiting for cluster to form ----");
-      listener.clusterFormedLatch.await();
-      TimeUnit.SECONDS.sleep(1);
+//     System.out.println("---- Waiting for cluster to form ----");
+//      listener.clusterFormedLatch.await();
+//      TimeUnit.SECONDS.sleep(1);
       
    }
 
